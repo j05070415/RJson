@@ -1,3 +1,5 @@
+[![CMake](https://github.com/j05070415/RJson/actions/workflows/cmake.yml/badge.svg?event=push)](https://github.com/j05070415/RJson/actions/workflows/cmake.yml)
+
 ## 背景
 目前，常见C++ JSON库有jsoncpp，libjson，rapidjson以及Qt的QJsonDocument，但是或多或少都有些问题，导致得额外使用一些技巧进行处理，不能够按照JSON原生方式进行使用。
 
