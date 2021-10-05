@@ -134,7 +134,7 @@ public:
     void setValue(const std::string &s) { _value->SetString(s.c_str(), static_cast<rapidjson::SizeType>(s.size())); }
     void setValue(const char *s) { _value->SetString(s, static_cast<rapidjson::SizeType>(strlen(s))); }
     void setValue(const char *s, int size) { _value->SetString(s, size); }
-    void setValue(const GenericRValue &other) { _value->CopyFrom(*other._value); }
+    void setValue(const GenericRValue &other) { _value->CopyFrom(*other._value, *_allocator); }
     void reset() { _value->SetNull(); }
 
     /// 初始化空对象

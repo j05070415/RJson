@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.4)
 PROJECT (RJson)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/rapidjson/include)
+add_definitions(-DRAPIDJSON_HAS_CXX11_RVALUE_REFS)
 add_definitions(-std=c++11)
 SET(SRC_LIST main.cpp)
 ADD_EXECUTABLE(example ${SRC_LIST})
