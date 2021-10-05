@@ -183,7 +183,7 @@ public:
     }
 
     /// 按照key键索引其对应的值，只对Object类型有效
-    GenericRValue operator[](const std::string &key) {
+    GenericRValue operator[](const std::string &key) const {
         if (_allocator == nullptr) {
             printf("Alloctor is null, RValue construct with no alloctor\n");
             return {};
@@ -455,7 +455,7 @@ public:
         return result;
     }
 
-    RValue operator[](const std::string &key) {
+    RValue operator[](const std::string &key) const {
         if (_doc.IsNull())
             _doc.SetObject();
         if (!_doc.IsObject()) {
@@ -558,7 +558,7 @@ public:
     }
 
 private:
-    rapidjson::Document _doc;
+    mutable rapidjson::Document _doc;
 };
 }
 
