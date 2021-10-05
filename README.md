@@ -6,6 +6,7 @@
 * Qt的JSON库也很好用，但是有两个大缺点，超过120M基本不能用，另外对于嵌套内容修改非常麻烦。
 
 基于以上原因，本人基于rapidjson封装了一个非常好用JSON库,它继承了rapidjson优点，能够非常方便对JSON进行增删改查，以及序列化和反序列化操作。
+* [RapidJSON GitHub](https://github.com/Tencent/rapidjson/)
 
 ## 简介
 JSON库提供对UTF8编码JSON处理，提供RValue和RDocument两个类，定义在RJson命名空间下，主要功能包括：
