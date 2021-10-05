@@ -221,7 +221,7 @@ public:
     }
 
     //数组类型操作函数
-    GenericRValue operator[](unsigned int i) {
+    GenericRValue operator[](unsigned int i) const {
         if (!_value->IsArray()) {
             printf("RValue is not an array\n");
             return {};
@@ -473,7 +473,7 @@ public:
         return RValue(&value, &_doc.GetAllocator());
     }
 
-    RValue operator[](unsigned int i) {
+    RValue operator[](unsigned int i) const {
         if (!_doc.IsArray()) {
             printf("RDocument is not an array\n");
             return {};
