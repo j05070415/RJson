@@ -1,7 +1,5 @@
-#include <QCoreApplication>
-#include <QDebug>
-#include <QFile>
-#include <QDateTime>
+
+#include <stdio.h>
 
 #include "RJson.h"
 
@@ -10,11 +8,11 @@ using namespace rapidjson;
 
 void print(const RValue& v) {
     RDocument doc(v);
-    qDebug() << doc.toJson().c_str();
+    printf("%s\n", doc.toJson().c_str());
 }
 
 void print(const RDocument& v) {
-    qDebug() << v.toJson().c_str();
+    printf("%s\n", v.toJson().c_str());
 }
 
 template<typename T, typename ...Args>
@@ -35,8 +33,7 @@ void testRJson() {
         unsigned int i2 = 0xFFFFFFFF;//4294967295
         long long i3 = 0x7FFFFFFFFFFFFFFF;//9223372036854775807
         unsigned long long i4 = 0xFFFFFFFFFFFFFFFF;//18446744073709551615
-        auto txt1 = QString::fromLocal8Bit("hello workd!你好，世界");
-        std::string s1(txt1.toUtf8().data());
+        std::string s1("hello workd!你好，世界");
 
         RValue v0, v1(true), v2(110.123), v3(-100), v4(i1),
                 v5(i2), v6(i3), v7(i4),
@@ -109,8 +106,7 @@ void testRJson() {
               d0,d1,d2,d3,d4,d5);
 
         //拷贝构造和Move语义测试
-        auto txt = QString::fromLocal8Bit("北京市天安门人民大会堂1号1室");
-        std::string str(txt.toUtf8().data());
+        std::string str("北京市天安门人民大会堂1号1室");
 
         printf("copy & move\n");
         o1 = a1;
@@ -128,7 +124,7 @@ void testRJson() {
         printf("\nparse JSON string: \n");
         std::string str = "{\"count\":2,\"names\":[\"zhangsan\",\"wangwu\"]}";
         auto doc1 = RDocument::fromJson(str.c_str(), str.size());
-        qDebug() << doc1.toJson().c_str();
+        printf("%s\n", doc1.toJson().c_str());
     }
 
     {
@@ -139,7 +135,7 @@ void testRJson() {
         j1["age"] = 11;
         j1["jone"]["name"] = "jone";
         j1["jone"]["age"] = "12";
-        qDebug() << RDocument(j1).toJson().c_str();
+        printf("%s\n", RDocument(j1).toJson().c_str());
     }
 
     {
@@ -155,7 +151,7 @@ void testRJson() {
         j1["age"] = 111;
         j1["jone"]["name"] = "jone1";
         j1["jone"]["age"] = "121";
-        qDebug() << RDocument(j1).toJson().c_str();
+        printf("%s\n", RDocument(j1).toJson().c_str());
     }
 
     {
@@ -170,7 +166,7 @@ void testRJson() {
         for (unsigned int i=0; i<names.size(); ++i) {
             auto name = names[i];
             print(name);
-            qDebug() << name["name"].toString().c_str();
+            printf("%s\n", name["name"].toString().c_str());
         }
     }
 
@@ -235,29 +231,13 @@ void testRJson() {
         value["names"][0].remove("age");
         print(value);
     }
-    {
-        QFile file("C:/test.json");
-        if (!file.open(QIODevice::ReadOnly))
-            return;
-        auto text = file.readAll();
-        auto start = QDateTime::currentMSecsSinceEpoch();
-        auto doc = RDocument::fromJson(text.data(), text.size());
-        auto end = QDateTime::currentMSecsSinceEpoch();
-        qDebug() << "eclipsed:" << end-start;
-        auto keys = doc.keys();
-        for (auto v : keys) {
-            qDebug() << v.c_str();
-        }
-    }
 }
 
-int main(int argc, char *argv[])
+int main(int, char *[])
 {
-    QCoreApplication a(argc, argv);
-
-    while (true) {
+//    while (true) {
         testRJson();
-    }
+//    }
 
-    return a.exec();
+    return 0;
 }
