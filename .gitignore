@@ -71,3 +71,8 @@ build/x64/Debug/ZERO_CHECK/ZERO_CHECK.tlog/custombuild.command.1.tlog
 build/x64/Debug/ZERO_CHECK/ZERO_CHECK.tlog/custombuild.read.1.tlog
 build/x64/Debug/ZERO_CHECK/ZERO_CHECK.tlog/custombuild.write.1.tlog
 build/x64/Debug/ZERO_CHECK/ZERO_CHECK.tlog/ZERO_CHECK.lastbuildstate
+*.exe
+*.obj
+*.lastbuildstate
+*.tlog
+*.log

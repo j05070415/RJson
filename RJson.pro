@@ -14,7 +14,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 DEFINES += RAPIDJSON_HAS_CXX11_RVALUE_REFS
-INCLUDEPATH += $$PWD/../rapidjson-1.1.0/include
+INCLUDEPATH += $$PWD/rapidjson/include
 SOURCES += \
         main.cpp
 

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.4)
 PROJECT (RJson)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/../rapidjson-1.1.0/include)
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/rapidjson/include)
 SET(SRC_LIST main.cpp)
 ADD_EXECUTABLE(example ${SRC_LIST})
