@@ -1,5 +1,5 @@
 ## 背景
-目前，常见C++ JSON库有jsoncpp，libjson，rapidjson以及Qt的QJsonDocument，但是或多或少都有些问题，导致项目和产品中对JSON使用得使用一些技巧进行折中处理，不能够按照JSON原生方式进行使用。
+目前，常见C++ JSON库有jsoncpp，libjson，rapidjson以及Qt的QJsonDocument，但是或多或少都有些问题，导致得额外使用一些技巧进行处理，不能够按照JSON原生方式进行使用。
 
 * jsoncpp和libjson对于大JSON文件（200M）解析速度非常慢，基本不能使用，优点是易用性好些。
 * rapidjson优点非常多，用在生产环境基本没问，例如性能好，自测200M文件解析10s基本搞定（本人笔记本联想T450 2012年的笔记本了），内存占用少，稳定性好，唯一缺点使用复杂，一不小心就会内存泄漏或者崩溃。
