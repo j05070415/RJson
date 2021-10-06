@@ -235,9 +235,9 @@ void testRJson() {
 
 int main(int, char *[])
 {
-    while (true) {
-        testRJson();
-    }
+//    while (true) {
+    testRJson();
+//    }
 
     return 0;
 }

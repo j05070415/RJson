@@ -162,7 +162,12 @@ public:
     }
     GenericRValue& operator=(GenericRValue &&other) {
         if (this != &other) {
-            *_value = *other._value;
+            if (_own && _value != nullptr)
+                delete _value;
+            _value = other._value;
+            _own = other._own;
+            other._value = nullptr;
+            other._own = false;
         }
 
         return *this;
@@ -197,7 +202,7 @@ public:
         }
         if (!_value->HasMember(key.c_str())) {
             //±ØÐë¿½±´keyÄÚÈÝ
-            rapidjson::Value lvalue(key.c_str(), *_allocator);
+            rapidjson::Value lvalue(key.c_str(), key.size(), *_allocator);
             _value->AddMember(lvalue, {}, *_allocator);
         }
 
@@ -465,7 +470,7 @@ public:
 
         if (!_doc.HasMember(key.c_str())) {
             //±ØÐë¿½±´keyÄÚÈÝ
-            rapidjson::Value lvalue(key.c_str(), _doc.GetAllocator());
+            rapidjson::Value lvalue(key.c_str(), key.size(), _doc.GetAllocator());
             _doc.AddMember(lvalue, {}, _doc.GetAllocator());
         }
 
