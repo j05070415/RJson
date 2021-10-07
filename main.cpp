@@ -1,4 +1,4 @@
-
+ï»¿
 #include <stdio.h>
 
 #include "RJson.h"
@@ -26,14 +26,14 @@ void testRJson() {
     auto alloc = doc.allocator();
 
     {
-        //RValue¹¹Ôì²âÊÔ
+        //RValueæ„é€ æµ‹è¯•
         printf("***************RValue***************\n");
-        //ÊıÖµÀàĞÍ,×Ö·û´®ÀàĞÍ
+        //æ•°å€¼ç±»å‹,å­—ç¬¦ä¸²ç±»å‹
         int i1 = 0x7FFFFFFF;//2147483647
         unsigned int i2 = 0xFFFFFFFF;//4294967295
         long long i3 = 0x7FFFFFFFFFFFFFFF;//9223372036854775807
         unsigned long long i4 = 0xFFFFFFFFFFFFFFFF;//18446744073709551615
-        std::string s1("hello workd!ÄãºÃ£¬ÊÀ½ç");
+        std::string s1("hello workd!ä½ å¥½ï¼Œä¸–ç•Œ");
 
         RValue v0, v1(true), v2(110.123), v3(-100), v4(i1),
                 v5(i2), v6(i3), v7(i4),
@@ -43,7 +43,7 @@ void testRJson() {
         v1 = "changed";
         print(v1);
 
-        //arrayÀàĞÍ
+        //arrayç±»å‹
         RValue a1(alloc);
         a1.append(11);
         a1.append(111.23456);
@@ -52,7 +52,7 @@ void testRJson() {
         print(a1.last());
         print(a1);
 
-        //objectÀàĞÍ
+        //objectç±»å‹
 //        {"phone":123455,"name":"jone","addr":"xxx@asdfasf",
 //        "object":{"name":"smith","age":"13"},
 //        "array":["david",99.1234567,true,-123]}
@@ -68,7 +68,7 @@ void testRJson() {
         o1["array"].append(-123);
         print(o1);
 
-        //¿½±´¹¹ÔìºÍMoveÓïÒå²âÊÔ
+        //æ‹·è´æ„é€ å’ŒMoveè¯­ä¹‰æµ‹è¯•
         printf("copy & move\n");
         o1 = a1;
         print(o1, a1);
@@ -76,9 +76,9 @@ void testRJson() {
         print(v0, a1);
     }
     {
-        //RDocumentÏà¹Ø²Ù×÷
+        //RDocumentç›¸å…³æ“ä½œ
         printf("\n***************RDocument***************\n");
-        //arrayÀàĞÍ
+        //arrayç±»å‹
         RDocument a1;
         a1.append(11);
         a1.append(111.23456);
@@ -87,7 +87,7 @@ void testRJson() {
         print(a1.last());
         print(a1);
 
-        //objectÀàĞÍ
+        //objectç±»å‹
         RDocument o1;
         o1["phone"] = 123455;
         o1["name"] = "jone";
@@ -105,8 +105,8 @@ void testRJson() {
               d3.value(), d4.value(), d5.value(),
               d0,d1,d2,d3,d4,d5);
 
-        //¿½±´¹¹ÔìºÍMoveÓïÒå²âÊÔ
-        std::string str("±±¾©ÊĞÌì°²ÃÅÈËÃñ´ó»áÌÃ1ºÅ1ÊÒ");
+        //æ‹·è´æ„é€ å’ŒMoveè¯­ä¹‰æµ‹è¯•
+        std::string str("åŒ—äº¬å¸‚å¤©å®‰é—¨äººæ°‘å¤§ä¼šå ‚1å·1å®¤");
 
         printf("copy & move\n");
         o1 = a1;
@@ -120,7 +120,7 @@ void testRJson() {
     }
 
     {
-        // ½âÎö×Ö·û´®
+        // è§£æå­—ç¬¦ä¸²
         printf("\nparse JSON string: \n");
         std::string str = "{\"count\":2,\"names\":[\"zhangsan\",\"wangwu\"]}";
         auto doc1 = RDocument::fromJson(str.c_str(), str.size());
@@ -128,7 +128,7 @@ void testRJson() {
     }
 
     {
-        //ÖØĞÂ¹¹ÔìJSON£¬²¢×ª³É×Ö·û´®
+        //é‡æ–°æ„é€ JSONï¼Œå¹¶è½¬æˆå­—ç¬¦ä¸²
         printf("\ncreate JSON, to string: \n");
         RValue j1(alloc);
         j1["name"] = "smith";
@@ -140,7 +140,7 @@ void testRJson() {
 
     {
         printf("\nmodify JSON value:\n");
-        // ĞŞ¸ÄJSON¶ÔÏó
+        // ä¿®æ”¹JSONå¯¹è±¡
         RValue j1(alloc);
         j1["name"] = "smith";
         j1["age"] = 11;
@@ -155,7 +155,7 @@ void testRJson() {
     }
 
     {
-        //¶ÁÊı×é
+        //è¯»æ•°ç»„
         printf("\nread JSON array:\n");
         std::string str = "{\"count\":2,\"names\":[{\"name\":\"zhangsan\"},{\"name\":\"wangwu\"}]}";
 
@@ -171,8 +171,8 @@ void testRJson() {
     }
 
     {
-        //ÒÔDocument¹¹ÔìÒ»¸öjson£¬È»ºóĞŞ¸ÄËü£¬×îºó×ª³É×Ö·û´®
-        // ÔËĞĞÊä³ö½á¹û£º
+        //ä»¥Documentæ„é€ ä¸€ä¸ªjsonï¼Œç„¶åä¿®æ”¹å®ƒï¼Œæœ€åè½¬æˆå­—ç¬¦ä¸²
+        // è¿è¡Œè¾“å‡ºç»“æœï¼š
         // {"count":3,"names":[{"id":1,"name":"zhangsan"}]}
         // {"count":9,"names":[{"id":1,"name":"lisi"}]}
         printf("\ndocument modify:\n");
@@ -190,8 +190,8 @@ void testRJson() {
     }
 
     {
-        //¹¹Ôì¿Õ¶ÔÏóºÍÊı×é
-        // ÔËĞĞÊä³ö½á¹û£º
+        //æ„é€ ç©ºå¯¹è±¡å’Œæ•°ç»„
+        // è¿è¡Œè¾“å‡ºç»“æœï¼š
         // {"age":{},"times":{},"names":[],"urls":[],"books":[]}
         // {"age":6,"times":{},"names":[],"urls":[],"books":[]}
         printf("\nempty value:\n");
@@ -211,8 +211,8 @@ void testRJson() {
     }
 
     {
-        // É¾³ıÊı×éÔªËØ
-        // Ê¾ÀıÔËĞĞÊä³ö£º
+        // åˆ é™¤æ•°ç»„å…ƒç´ 
+        // ç¤ºä¾‹è¿è¡Œè¾“å‡ºï¼š
         // { "names": [ {"name":"zhangsan","age":100}, {"name":"wangwu","age":90}, {"name":"xiaozhang","age":20} ]}
         // {"names":[{"name":"zhangsan","age":100},{"name":"wangwu","age":90}]}
         printf("\nremove value:\n");

@@ -1,4 +1,4 @@
-/****************************************************************************
+ï»¿/****************************************************************************
 ** Copyright (C) 2021. All rights reserved.
 **
 ** Licensed under the MIT License (the "License"); you may not use this file except
@@ -23,8 +23,8 @@
 
 namespace RJson {
 /**
- * @brief RValueÀà´ú±íJSONÖĞÖµÀàĞÍ£¬Ö§³Ö¶àÖÖÀàĞÍÊı¾İ,ÀıÈçÊıÖµÀàĞÍ¡¢¶ÔÏóÀàĞÍºÍÊı×éÀàĞÍ¡£
- * @code µäĞÍÓÃ·¨
+ * @brief RValueç±»ä»£è¡¨JSONä¸­å€¼ç±»å‹ï¼Œæ”¯æŒå¤šç§ç±»å‹æ•°æ®,ä¾‹å¦‚æ•°å€¼ç±»å‹ã€å¯¹è±¡ç±»å‹å’Œæ•°ç»„ç±»å‹ã€‚
+ * @code å…¸å‹ç”¨æ³•
  *      RValue o1(alloc);
  *      o1["phone"] = 123455;
  *      o1["name"] = "jone";
@@ -36,7 +36,7 @@ namespace RJson {
  *      o1["array"].append(true);
  *      o1["array"].append(-123);
  *      print(o1)
- * Êä³ö£º
+ * è¾“å‡ºï¼š
  *      {"phone":123455,"name":"jone","addr":"xxx@asdfasf",
  *      "object":{"name":"smith","age":"13"},
  *      "array":["david",99.1234567,true,-123]}
@@ -44,7 +44,7 @@ namespace RJson {
 template<typename Allocator = rapidjson::MemoryPoolAllocator<>>
 class GenericRValue {
 public:
-    //¹¹Ôìº¯Êı
+    //æ„é€ å‡½æ•°
     GenericRValue(Allocator* alloc = nullptr)
         : _value(new rapidjson::Value), _allocator(alloc) { _value->SetNull(); }
     GenericRValue(bool b, Allocator* alloc = nullptr)
@@ -66,7 +66,7 @@ public:
     GenericRValue(const char *s, int size, Allocator* alloc = nullptr)
         : _value(new rapidjson::Value), _allocator(alloc) { setValue(s, size); }
 
-    //¿½±´¹¹ÔìÊµÏÖ
+    //æ‹·è´æ„é€ å®ç°
     GenericRValue(const GenericRValue &other)
         : _value(new rapidjson::Value){
         if (_allocator != nullptr)
@@ -86,7 +86,7 @@ public:
         if (_own) { delete _value; }
     }
 
-    //ÅĞ¶ÏÖµÀàĞÍ
+    //åˆ¤æ–­å€¼ç±»å‹
     bool isArray() const { return _value->IsArray(); }
     bool isBool() const { return _value->IsBool(); }
     bool isDouble() const { return _value->IsDouble(); }
@@ -94,7 +94,7 @@ public:
     bool isObject() const { return _value->IsObject(); }
     bool isString() const { return _value->IsString(); }
 
-    //Öµ×ª»»
+    //å€¼è½¬æ¢
     bool toBool(bool defaultValue = false) const {
         if (!_value->IsBool()) return defaultValue;
         return _value->GetBool();
@@ -124,7 +124,7 @@ public:
         return _value->GetString();
     }
 
-    //ĞŞ¸ÄÖµ
+    //ä¿®æ”¹å€¼
     void setValue(bool b) { _value->SetBool(b); }
     void setValue(double d) { _value->SetDouble(d); }
     void setValue(int n) { _value->SetInt(n); }
@@ -137,16 +137,16 @@ public:
     void setValue(const GenericRValue &other) { _value->CopyFrom(*other._value, *_allocator); }
     void reset() { _value->SetNull(); }
 
-    /// ³õÊ¼»¯¿Õ¶ÔÏó
+    /// åˆå§‹åŒ–ç©ºå¯¹è±¡
     void setObject() { _value->SetObject(); }
-    /// ³õÊ¼»¯¿ÕÊı×é
+    /// åˆå§‹åŒ–ç©ºæ•°ç»„
     void setArray() { _value->SetArray(); }
 
-    //ÔÊĞíÍâ²¿ĞŞ¸Ä·ÖÅäÆ÷,ÓĞ¿ÉÄÜµ¼ÖÂ±ÀÀ££¬ÔÚ²»ÁË½â·ÖÅäÆ÷Ô­ÀíÇé¿öÏÂ£¬²»½¨ÒéÊ¹ÓÃ
+    //å…è®¸å¤–éƒ¨ä¿®æ”¹åˆ†é…å™¨,æœ‰å¯èƒ½å¯¼è‡´å´©æºƒï¼Œåœ¨ä¸äº†è§£åˆ†é…å™¨åŸç†æƒ…å†µä¸‹ï¼Œä¸å»ºè®®ä½¿ç”¨
     void setAllocator(Allocator* alloc) { _allocator = alloc; }
     Allocator* allocator() const { return _allocator; }
 
-    //²Ù×÷·ûÏà¹Øº¯Êı
+    //æ“ä½œç¬¦ç›¸å…³å‡½æ•°
     bool operator==(const GenericRValue &other) const {
         return *_value == *other._value;
     }
@@ -173,8 +173,8 @@ public:
         return *this;
     }
 
-    //¶ÔÏóÀàĞÍ²Ù×÷º¯Êı
-    /// ÅĞ¶ÏÊÇ·ñ´æÔÚkey¼ü
+    //å¯¹è±¡ç±»å‹æ“ä½œå‡½æ•°
+    /// åˆ¤æ–­æ˜¯å¦å­˜åœ¨keyé”®
     bool contains(const std::string &key) {
         if (!_value->IsObject()) return false;
 
@@ -187,7 +187,7 @@ public:
         _value->RemoveMember(key.c_str());
     }
 
-    /// °´ÕÕkey¼üË÷ÒıÆä¶ÔÓ¦µÄÖµ£¬Ö»¶ÔObjectÀàĞÍÓĞĞ§
+    /// æŒ‰ç…§keyé”®ç´¢å¼•å…¶å¯¹åº”çš„å€¼ï¼Œåªå¯¹Objectç±»å‹æœ‰æ•ˆ
     GenericRValue operator[](const std::string &key) const {
         if (_allocator == nullptr) {
             printf("Alloctor is null, RValue construct with no alloctor\n");
@@ -201,7 +201,7 @@ public:
             return {};
         }
         if (!_value->HasMember(key.c_str())) {
-            //±ØĞë¿½±´keyÄÚÈİ
+            //å¿…é¡»æ‹·è´keyå†…å®¹
             rapidjson::Value lvalue(key.c_str(), key.size(), *_allocator);
             _value->AddMember(lvalue, {}, *_allocator);
         }
@@ -225,7 +225,7 @@ public:
         return result;
     }
 
-    //Êı×éÀàĞÍ²Ù×÷º¯Êı
+    //æ•°ç»„ç±»å‹æ“ä½œå‡½æ•°
     GenericRValue operator[](unsigned int i) const {
         if (!_value->IsArray()) {
             printf("RValue is not an array\n");
@@ -304,20 +304,20 @@ private:
     Allocator* _allocator = nullptr;
     rapidjson::Value* _value = nullptr;
 
-    /// TrueÊ±,Îö¹¹º¯ÊıÊÍ·Å_valueÖ¸Ïò¶ÔÏó;·ñÔò,²»ÊÍ·Å_valueÖ¸Ïò¶ÔÏó
+    /// Trueæ—¶,ææ„å‡½æ•°é‡Šæ”¾_valueæŒ‡å‘å¯¹è±¡;å¦åˆ™,ä¸é‡Šæ”¾_valueæŒ‡å‘å¯¹è±¡
     bool _own = true;
 };
 
 using RValue = GenericRValue<>;
 
 /**
- * @brief RDocumentÀàÓÃÀ´Ìá¹©JSONÎÄµµ¶ÁĞ´ÄÜÁ¦¡£
- * Ö§³ÖUTF8±àÂëµÄĞòÁĞ»¯ºÍ·´ĞòÁĞ»¯¹¦ÄÜ£¬ÀıÈç´ÓJSON¶ÔÏó×ª»»³É×Ö·û´®£¬toJson(); ´Ó×Ö·û´®×ª»»³ÉJSON¶ÔÏó£¬fromJson()¡£
- * Ìá¹©JSONÖµ»¥Ïà×ª»»¹¦ÄÜ£¬·½±ãÖµ²Ù×÷£¬ÀıÈçvalue()¡£
- * Ìá¹©»ùÓÚÎÄµµ·ÃÎÊÖµ¹¦ÄÜ£¬ÀıÈçoperator []¡£
- * Ìá¹©¶ÔÏóÀàĞÍÔöÉ¾¸Ä²é¹¦ÄÜ
- * Ìá¹©Êı×éÀàĞÍÔöÉ¾¸Ä²é¹¦ÄÜ
- * @code µäĞÍÓÃ·¨
+ * @brief RDocumentç±»ç”¨æ¥æä¾›JSONæ–‡æ¡£è¯»å†™èƒ½åŠ›ã€‚
+ * æ”¯æŒUTF8ç¼–ç çš„åºåˆ—åŒ–å’Œååºåˆ—åŒ–åŠŸèƒ½ï¼Œä¾‹å¦‚ä»JSONå¯¹è±¡è½¬æ¢æˆå­—ç¬¦ä¸²ï¼ŒtoJson(); ä»å­—ç¬¦ä¸²è½¬æ¢æˆJSONå¯¹è±¡ï¼ŒfromJson()ã€‚
+ * æä¾›JSONå€¼äº’ç›¸è½¬æ¢åŠŸèƒ½ï¼Œæ–¹ä¾¿å€¼æ“ä½œï¼Œä¾‹å¦‚value()ã€‚
+ * æä¾›åŸºäºæ–‡æ¡£è®¿é—®å€¼åŠŸèƒ½ï¼Œä¾‹å¦‚operator []ã€‚
+ * æä¾›å¯¹è±¡ç±»å‹å¢åˆ æ”¹æŸ¥åŠŸèƒ½
+ * æä¾›æ•°ç»„ç±»å‹å¢åˆ æ”¹æŸ¥åŠŸèƒ½
+ * @code å…¸å‹ç”¨æ³•
  *      std::string txt = "{ \"names\": [ {\"name\":\"zhangsan\",\"age\":100}, {\"name\":\"wangwu\",\"age\":90}, {\"name\":\"xiaozhang\",\"age\":20} ]}";
  *      auto doc = RDocument::fromJson(txt.c_str(), txt.size());
  *      auto value = doc.value();
@@ -328,7 +328,7 @@ using RValue = GenericRValue<>;
  *      value["names"].remove(2);
  *      value["names"][0].remove("age");
  *      print(value);
- * Êä³ö:
+ * è¾“å‡º:
  *      {"names":[{"name":"zhangsan"},{"name":"wangwu","age":90}]}
  *      {"names":[{"name":"zhangsan"},{"name":"wangwu","age":90}]}
  */
@@ -336,7 +336,7 @@ class RDocument {
 public:
     RDocument() {}
     /**
-     * @brief RDocument½«value¶ÔÏó×ª³Édocumnet¶ÔÏó¡£
+     * @brief RDocumentå°†valueå¯¹è±¡è½¬æˆdocumnetå¯¹è±¡ã€‚
      * @code
      *  RDocument doc;
      *  auto alloc = doc.allocator();
@@ -346,7 +346,7 @@ public:
      *  j1["jone"]["name"] = "jone";
      *  j1["jone"]["age"] = "12";
      *  auto text = RDocument(j1).toJson();
-     * @param objectÎªJSONÖµ¶ÔÏó
+     * @param objectä¸ºJSONå€¼å¯¹è±¡
      */
     RDocument(const RValue &object) {
         _doc.CopyFrom(*(object._value), _doc.GetAllocator());
@@ -469,7 +469,7 @@ public:
         }
 
         if (!_doc.HasMember(key.c_str())) {
-            //±ØĞë¿½±´keyÄÚÈİ
+            //å¿…é¡»æ‹·è´keyå†…å®¹
             rapidjson::Value lvalue(key.c_str(), key.size(), _doc.GetAllocator());
             _doc.AddMember(lvalue, {}, _doc.GetAllocator());
         }
@@ -549,7 +549,7 @@ public:
         return buffer.GetString();
     }
 
-    /// ÓÉÓÚRapidjsonÊ¹ÓÃÒªÇó,RDocumentÀàÌá¹©·ÖÅäÆ÷»ñÈ¡½Ó¿Ú,±£Ö¤ÄÚ´æ¸ßĞ§·ÖÅä¼°Í³Ò»ÊÍ·Å
+    /// ç”±äºRapidjsonä½¿ç”¨è¦æ±‚,RDocumentç±»æä¾›åˆ†é…å™¨è·å–æ¥å£,ä¿è¯å†…å­˜é«˜æ•ˆåˆ†é…åŠç»Ÿä¸€é‡Šæ”¾
     template<typename T = rapidjson::MemoryPoolAllocator<>>
     T* allocator() {
         return &_doc.GetAllocator();
