@@ -35,9 +35,9 @@ void testRJson() {
         unsigned long long i4 = 0xFFFFFFFFFFFFFFFF;//18446744073709551615
         std::string s1("hello workd!你好，世界");
 
-        RValue v0, v1(true), v2(110.123), v3(-100), v4(i1),
-                v5(i2), v6(i3), v7(i4),
-                v8(s1), v9(s1.c_str()), v10(s1.c_str(), s1.size());
+        RValue v0, v1(true, alloc), v2(110.123, alloc), v3(-100, alloc), v4(i1, alloc),
+                v5(i2, alloc), v6(i3, alloc), v7(i4, alloc),
+                v8(s1, alloc), v9(s1.c_str(), alloc), v10(s1.c_str(), s1.size(), alloc);
         print(v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10);
 
         v1 = "changed";
@@ -94,16 +94,8 @@ void testRJson() {
         o1["addr"] = "xxx@asdfasf";
         print(o1);
 
-        o1.setValue(12345);
-        print(o1);
-
-        RDocument d0(true),d1(false),d2(11),d3("hello"),d4(alloc),d5(alloc);
-        d4["name"] = "jone";
-        d5.append("smith");
-        d5.append(12);
-        print(d0.value(), d1.value(), d2.value(),
-              d3.value(), d4.value(), d5.value(),
-              d0,d1,d2,d3,d4,d5);
+//        o1.setValue(12345);
+//        print(o1);
 
         //拷贝构造和Move语义测试
         std::string str("北京市天安门人民大会堂1号1室");
@@ -231,13 +223,55 @@ void testRJson() {
         value["names"][0].remove("age");
         print(value);
     }
+
+    {
+        RDocument result;
+        RValue payload(result.allocator());
+        payload["id"] = "12312312321343545";
+        payload["bus_type"] = "1";
+        payload["name"] = "123123asdfasdfsdafsdaf";
+        payload["size"] = 11;
+        payload["offset"] = 0;
+        payload["order"] = 0;
+        payload["period"] = "";
+        payload["channel_name"] = "";
+//        auto paystext = std::string("[\"11\",\"22]\"");
+//        payload["pays"] = RDocument::fromJson(paystext.data(), paystext.size()).value();
+
+        //find fields
+        RValue fields(result.allocator());
+        for (int i = 0; i < 1000; ++i) {
+            for (int j=0; j < 1000; ++j) {
+                RValue field(result.allocator());
+                field["name"] = "123123asdfasdfsdafsdaf";
+                field["size"] = 222;
+                field["offset"] = 123;
+                field["type"] = 1;
+                field["unit"] = "123123asdfasdfsdafsdaf";
+                field["meaning"] = "123123";
+                field["mask"] = "123123asdfasdfsdafsdaf";
+                field["dim"] = 11.1;
+                field["amp"] = 12.2321;
+                field["order"] = 1;
+                field["interval"] = 123;
+                field["field_id"] = "asdfasdfadsf";
+                field["signal_id"] = "123";
+                fields.append(field);
+            }
+        }
+        payload["values"] = fields;
+        result.append(payload);
+
+        auto text = result.toJson();
+        printf("%d\n", text.size());
+    }
 }
 
 int main(int, char *[])
 {
-//    while (true) {
+    while (true) {
     testRJson();
-//    }
+    }
 
     return 0;
 }
