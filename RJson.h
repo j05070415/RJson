@@ -45,23 +45,25 @@ template<typename Allocator = rapidjson::MemoryPoolAllocator<>>
 class GenericRValue {
 public:
     //构造函数
-    GenericRValue(Allocator* alloc = nullptr)
+    GenericRValue()
+        : _value(new rapidjson::Value), _allocator(nullptr) { _value->SetNull(); }
+    GenericRValue(Allocator* alloc)
         : _value(new rapidjson::Value), _allocator(alloc) { _value->SetNull(); }
-    GenericRValue(bool b, Allocator* alloc = nullptr)
+    GenericRValue(bool b, Allocator* alloc)
         : _value(new rapidjson::Value), _allocator(alloc) { setValue(b); }
-    GenericRValue(double d, Allocator* alloc = nullptr)
+    GenericRValue(double d, Allocator* alloc)
         : _value(new rapidjson::Value), _allocator(alloc) { setValue(d); }
-    GenericRValue(int n, Allocator* alloc = nullptr)
+    GenericRValue(int n, Allocator* alloc)
         : _value(new rapidjson::Value), _allocator(alloc) { setValue(n); }
-    GenericRValue(unsigned int n, Allocator* alloc = nullptr)
+    GenericRValue(unsigned int n, Allocator* alloc)
         : _value(new rapidjson::Value), _allocator(alloc) { setValue(n); }
-    GenericRValue(long long n, Allocator* alloc = nullptr)
+    GenericRValue(long long n, Allocator* alloc)
         : _value(new rapidjson::Value), _allocator(alloc) { setValue(n); }
-    GenericRValue(unsigned long long n, Allocator* alloc = nullptr)
+    GenericRValue(unsigned long long n, Allocator* alloc)
         : _value(new rapidjson::Value), _allocator(alloc) { setValue(n); }
-    GenericRValue(const std::string &s, Allocator* alloc = nullptr)
+    GenericRValue(const std::string &s, Allocator* alloc)
         : _value(new rapidjson::Value), _allocator(alloc) { setValue(s); }
-    GenericRValue(const char *s, Allocator* alloc = nullptr)
+    GenericRValue(const char *s, Allocator* alloc)
         : _value(new rapidjson::Value), _allocator(alloc) { setValue(s); }
     GenericRValue(const char *s, int size, Allocator* alloc = nullptr)
         : _value(new rapidjson::Value), _allocator(alloc) { setValue(s, size); }
@@ -131,9 +133,9 @@ public:
     void setValue(unsigned int n) { _value->SetUint(n); }
     void setValue(long long n) { _value->SetInt64(n); }
     void setValue(unsigned long long n) { _value->SetUint64(n); }
-    void setValue(const std::string &s) { _value->SetString(s.c_str(), static_cast<rapidjson::SizeType>(s.size())); }
-    void setValue(const char *s) { _value->SetString(s, static_cast<rapidjson::SizeType>(strlen(s))); }
-    void setValue(const char *s, int size) { _value->SetString(s, size); }
+    void setValue(const std::string &s) { _value->SetString(s.c_str(), static_cast<rapidjson::SizeType>(s.size()), *_allocator); }
+    void setValue(const char *s) { _value->SetString(s, static_cast<rapidjson::SizeType>(strlen(s)), *_allocator); }
+    void setValue(const char *s, int size) { _value->SetString(s, size, *_allocator); }
     void setValue(const GenericRValue &other) { _value->CopyFrom(*other._value, *_allocator); }
     void reset() { _value->SetNull(); }
 
@@ -160,15 +162,46 @@ public:
 
         return *this;
     }
-    GenericRValue& operator=(GenericRValue &&other) {
-        if (this != &other) {
-            if (_own && _value != nullptr)
-                delete _value;
-            _value = other._value;
-            _own = other._own;
-            other._value = nullptr;
-            other._own = false;
-        }
+//    GenericRValue& operator=(GenericRValue &&other) {
+//        if (this != &other) {
+//            *_value = *other._value;
+//        }
+
+//        return *this;
+//    }
+    GenericRValue& operator=(const std::string &value) {
+        setValue(value);
+
+        return *this;
+    }
+
+    GenericRValue& operator=(const char *c) {
+        setValue(c);
+
+        return *this;
+    }
+    GenericRValue& operator=(int value) {
+        setValue(value);
+
+        return *this;
+    }
+    GenericRValue& operator=(unsigned int value) {
+        setValue(value);
+
+        return *this;
+    }
+    GenericRValue& operator=(long long value) {
+        setValue(value);
+
+        return *this;
+    }
+    GenericRValue& operator=(unsigned long long value) {
+        setValue(value);
+
+        return *this;
+    }
+    GenericRValue& operator=(double value) {
+        setValue(value);
 
         return *this;
     }
@@ -264,6 +297,46 @@ public:
         _value->PushBack(*value._value, *_allocator);
     }
 
+    void append(const std::string& value) {
+        GenericRValue v(value, _allocator);
+        append(v);
+    }
+
+    void append(const char* value) {
+        GenericRValue v(value, _allocator);
+        append(v);
+    }
+
+    void append(const char* value, int size) {
+        GenericRValue v(value, size, _allocator);
+        append(v);
+    }
+
+    void append(int value) {
+        GenericRValue v(value, _allocator);
+        append(v);
+    }
+
+    void append(unsigned int value) {
+        GenericRValue v(value, _allocator);
+        append(v);
+    }
+
+    void append(long long value) {
+        GenericRValue v(value, _allocator);
+        append(v);
+    }
+
+    void append(unsigned long long value) {
+        GenericRValue v(value, _allocator);
+        append(v);
+    }
+
+    void append(double value) {
+        GenericRValue v(value, _allocator);
+        append(v);
+    }
+
     GenericRValue last() {
         if (!_value->IsArray()) {
             printf("RValue is not an array, can not last!\n");
@@ -349,7 +422,8 @@ public:
      * @param object为JSON值对象
      */
     RDocument(const RValue &object) {
-        _doc.CopyFrom(*(object._value), _doc.GetAllocator());
+        if (object._value != nullptr)
+            _doc.CopyFrom(*(object._value), _doc.GetAllocator());
     }
 
     RDocument(const RDocument &other) {
@@ -369,45 +443,7 @@ public:
 
     RValue value() {
         RValue value(&_doc.GetAllocator());
-        auto type = _doc.GetType();
-        switch (type) {
-        case rapidjson::kFalseType :
-        case rapidjson::kTrueType  :
-            value._value->SetBool(_doc.GetBool());
-            break;
-        case rapidjson::kObjectType: {
-            auto iter = _doc.MemberBegin();
-            while (iter != _doc.MemberEnd()) {
-                value[iter->name.GetString()]._value->CopyFrom(iter->value, _doc.GetAllocator());
-                ++iter;
-            }
-            break;
-        } case rapidjson::kArrayType : {
-            auto iter = _doc.Begin();
-            while (iter != _doc.End()) {
-                rapidjson::Value tmp;
-                tmp.CopyFrom(*iter, _doc.GetAllocator());
-                value.append(RValue(&tmp, &_doc.GetAllocator()));
-                ++iter;
-            }
-            break;
-        } case rapidjson::kStringType:
-            value._value->SetString(_doc.GetString(),
-                                    _doc.GetStringLength(),
-                                    _doc.GetAllocator());
-            break;
-        case rapidjson::kNumberType:
-            if (_doc.IsInt()) { value._value->SetInt(_doc.GetInt()); }
-            else if (_doc.IsUint()) { value._value->SetUint(_doc.GetUint()); }
-            else if (_doc.IsInt64()) { value._value->SetInt64(_doc.GetInt64()); }
-            else if (_doc.IsUint64()) { value._value->SetUint64(_doc.GetUint64()); }
-            else if (_doc.IsFloat()) { value._value->SetFloat(_doc.GetFloat()); }
-            else if (_doc.IsDouble()) { value._value->SetDouble(_doc.GetDouble()); }
-            break;
-        default:
-            printf("unknow type:%d\n", type);
-            break;
-        }
+        value._value->CopyFrom(_doc, _doc.GetAllocator());
         return value;
     }
 
@@ -510,6 +546,46 @@ public:
         }
 
         _doc.PushBack(*value._value, _doc.GetAllocator());
+    }
+
+    void append(const std::string& value) {
+        RValue v(value, &_doc.GetAllocator());
+        append(v);
+    }
+
+    void append(const char* value) {
+        RValue v(value, &_doc.GetAllocator());
+        append(v);
+    }
+
+    void append(const char* value, int size) {
+        RValue v(value, size, &_doc.GetAllocator());
+        append(v);
+    }
+
+    void append(int value) {
+        RValue v(value, &_doc.GetAllocator());
+        append(v);
+    }
+
+    void append(unsigned int value) {
+        RValue v(value, &_doc.GetAllocator());
+        append(v);
+    }
+
+    void append(long long value) {
+        RValue v(value, &_doc.GetAllocator());
+        append(v);
+    }
+
+    void append(unsigned long long value) {
+        RValue v(value, &_doc.GetAllocator());
+        append(v);
+    }
+
+    void append(double value) {
+        RValue v(value, &_doc.GetAllocator());
+        append(v);
     }
 
     RValue last() {
